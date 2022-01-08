@@ -8,7 +8,7 @@ import org.junit.Test
 
 class CarFeature {
 
-/*    private val engine = Engine()
+    private val engine = Engine()
     private val car = Car(6.0, engine)
     @Test
     fun carIsLoosingFuelWhenItsTurnsOn() {
@@ -22,6 +22,6 @@ class CarFeature {
         car.turnOn()
 
         assertEquals(95, car.engine.temperature)
-        assertTrue(car.engine.isTurnOn)
-    }*/
+        assertTrue(car.engine.isTurnedOn)
+    }
 }
