@@ -1,6 +1,7 @@
 package com.example.tddpractice.acceptancetest
 
 import com.example.tddpractice.Car
+import com.example.tddpractice.Engine
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
