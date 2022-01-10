@@ -29,6 +29,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -43,5 +47,11 @@ dependencies {
 
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
     testImplementation "org.mockito:mockito-inline:2.21.0"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+
+
+
 
 }
