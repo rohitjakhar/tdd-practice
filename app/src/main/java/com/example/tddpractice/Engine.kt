@@ -10,7 +10,7 @@ class Engine(
 
     suspend fun turnOn() {
         isTurnedOn = true
-        delay(5000)
+        delay(6000)
         temperature = 95
 
         Log.d("test", "Engine has turned on")
