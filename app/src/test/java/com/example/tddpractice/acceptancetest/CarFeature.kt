@@ -20,19 +20,24 @@ class CarFeature {
     @get:Rule
     var coroutinesTestRule = MainCoroutineScopeRule()
 
-
     @Test
-    fun carIsLoosingFuelWhenItsTurnsOn() = runBlocking{
+    fun carIsLoosingFuelWhenItsTurnsOn() = runBlocking {
         car.turnOn()
 
         assertEquals(5.5, car.fule)
     }
 
     @Test
-    fun carIsTurningOnItsEngineAndIncreaseAndTemperature() = runBlocking{
+    fun carIsTurningOnItsEngineAndIncreaseAndTemperatureGradually() = runBlocking {
         car.turnOn()
 
-        coroutinesTestRule.testScheduler.apply { advanceTimeBy(6000); runCurrent() }
+        coroutinesTestRule.advanceTimeBy(2000)
+        assertEquals(25, car.engine.temperature)
+
+        coroutinesTestRule.advanceTimeBy(2000)
+        assertEquals(50, car.engine.temperature)
+
+        coroutinesTestRule.advanceTimeBy(2000)
         assertEquals(95, car.engine.temperature)
         assertTrue(car.engine.isTurnedOn)
     }
