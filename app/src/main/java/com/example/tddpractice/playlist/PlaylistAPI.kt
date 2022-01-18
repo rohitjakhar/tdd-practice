@@ -1,7 +1,8 @@
 package com.example.tddpractice.playlist
 
+import retrofit2.http.GET
+
 interface PlaylistAPI {
-    suspend fun fetchAllPlaylist(): List<Playlist> {
-        return listOf()
-    }
+    @GET("playlists")
+    suspend fun fetchAllPlaylist(): List<Playlist>
 }

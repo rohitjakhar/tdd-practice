@@ -30,7 +30,9 @@ class MyPlaylistRecyclerViewAdapter(
         holder.playlistImage.setImageResource(R.mipmap.playlist)
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int {
+        return values.size
+    }
 
     inner class ViewHolder(binding: PlaylistItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val playlistName: TextView = binding.playlistName
