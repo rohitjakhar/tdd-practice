@@ -1,6 +1,7 @@
 package com.example.tddpractice.playlist
 
 import com.example.tddpractice.utils.BaseUnitTest
+import com.example.tddpractice.utils.captureValues
 import com.example.tddpractice.utils.getValueForTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -29,6 +30,11 @@ class PlaylistViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitErrorWhenReceiveError() {
+        val viewModel = mockErrorCase()
+        assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+    }
+
+    private fun mockErrorCase(): PlaylistViewModel {
         runBlocking {
             whenever(repository.getPlaylists()).thenReturn(
                 flow {
@@ -37,7 +43,7 @@ class PlaylistViewModelShould : BaseUnitTest() {
             )
         }
         val viewModel = PlaylistViewModel(repository)
-        assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+        return viewModel
     }
 
     @Test
@@ -45,6 +51,17 @@ class PlaylistViewModelShould : BaseUnitTest() {
         val viewModel = mockSuccessfulCase()
 
         assertEquals(excepted, viewModel.playlist.getValueForTest())
+    }
+
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
     }
 
     private fun mockSuccessfulCase(): PlaylistViewModel {

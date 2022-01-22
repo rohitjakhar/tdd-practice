@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -27,11 +28,16 @@ class PlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_playlist, container, false)
-
         setupViewModel()
+
+        viewModel.loader.observe(this as LifecycleOwner, { loading ->
+            when (loading) {
+                true -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
+            }
+        })
         viewModel.playlist.observe(this as LifecycleOwner, { playlists ->
             if (playlists.getOrNull() != null)
-                setupList(view, playlists.getOrNull()!!)
+                setupList(view.findViewById(R.id.playlists_list), playlists.getOrNull()!!)
             else {
                 // TODO: 1/15/22
             }
