@@ -33,6 +33,7 @@ class PlaylistFragment : Fragment() {
         viewModel.loader.observe(this as LifecycleOwner, { loading ->
             when (loading) {
                 true -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
+                else -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
             }
         })
         viewModel.playlist.observe(this as LifecycleOwner, { playlists ->
