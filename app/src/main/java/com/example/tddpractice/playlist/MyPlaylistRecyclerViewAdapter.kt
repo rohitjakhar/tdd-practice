@@ -1,6 +1,7 @@
 package com.example.tddpractice.playlist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,7 +10,8 @@ import com.example.tddpractice.R
 import com.example.tddpractice.databinding.PlaylistItemBinding
 
 class MyPlaylistRecyclerViewAdapter(
-    private val values: List<Playlist>
+    private val values: List<Playlist>,
+    private val listener: (String) -> Unit
 ) : RecyclerView.Adapter<MyPlaylistRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,6 +30,9 @@ class MyPlaylistRecyclerViewAdapter(
         holder.playlistName.text = item.name
         holder.playlistCategory.text = item.category
         holder.playlistImage.setImageResource(item.image)
+        holder.root.setOnClickListener {
+            listener.invoke(item.id)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -38,5 +43,6 @@ class MyPlaylistRecyclerViewAdapter(
         val playlistName: TextView = binding.playlistName
         val playlistCategory: TextView = binding.playlistCategory
         val playlistImage: ImageView = binding.playlistImage
+        val root: View = binding.playlistItem
     }
 }

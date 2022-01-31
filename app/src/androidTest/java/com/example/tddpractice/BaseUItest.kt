@@ -4,16 +4,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import com.example.tddpractice.playlist.idlingResource
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseUItest {
+
+    val mActivityRule = ActivityTestRule(MainActivity::class.java)
+        @Rule get
 
     @Before
     fun setup() {
@@ -36,11 +41,11 @@ abstract class BaseUItest {
                 if (view.parent !is ViewGroup) return false
                 val parent = view.parent as ViewGroup
 
-                return (
-                        parentMatcher.matches(parent) &&
-                                parent.childCount > childPosition &&
-                                parent.getChildAt(childPosition) == view
-                        )
+                return  (
+                    parentMatcher.matches(parent) &&
+                        parent.childCount > childPosition &&
+                        parent.getChildAt(childPosition) == view
+                    )
             }
         }
     }

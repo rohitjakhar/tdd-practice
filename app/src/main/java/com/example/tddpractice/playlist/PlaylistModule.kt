@@ -15,7 +15,7 @@ val idlingResource = OkHttp3IdlingResource.create("okhttp", client)
 
 @Module
 @InstallIn(SingletonComponent::class)
-class PlaylistModule {
+object PlaylistModule {
     @Singleton
     @Provides
     fun retrofit(): Retrofit = Retrofit.Builder()

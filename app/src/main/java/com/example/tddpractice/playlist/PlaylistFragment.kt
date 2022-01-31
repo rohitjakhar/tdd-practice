@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tddpractice.R
@@ -30,12 +31,12 @@ class PlaylistFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_playlist, container, false)
         setupViewModel()
 
-        viewModel.loader.observe(this as LifecycleOwner, { loading ->
-            when (loading) {
-                true -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
-                else -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
-            }
-        })
+        observeLoader(view)
+        observePlaylist(view)
+        return view
+    }
+
+    private fun observePlaylist(view: View) {
         viewModel.playlist.observe(this as LifecycleOwner, { playlists ->
             if (playlists.getOrNull() != null)
                 setupList(view.findViewById(R.id.playlists_list), playlists.getOrNull()!!)
@@ -43,7 +44,15 @@ class PlaylistFragment : Fragment() {
                 // TODO: 1/15/22
             }
         })
-        return view
+    }
+
+    private fun observeLoader(view: View) {
+        viewModel.loader.observe(this as LifecycleOwner, { loading ->
+            when (loading) {
+                true -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
+                else -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
+            }
+        })
     }
 
     private fun setupList(
@@ -53,7 +62,11 @@ class PlaylistFragment : Fragment() {
         with(view as RecyclerView) {
             layoutManager = LinearLayoutManager(requireContext())
 
-            adapter = MyPlaylistRecyclerViewAdapter(playlists)
+            adapter = MyPlaylistRecyclerViewAdapter(playlists) { id ->
+                val action =
+                    PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistDetailFragment(id)
+                findNavController().navigate(action)
+            }
         }
     }
 

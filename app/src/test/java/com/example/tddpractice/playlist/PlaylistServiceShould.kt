@@ -31,26 +31,24 @@ class PlaylistServiceShould : BaseUnitTest() {
         assertEquals(Result.success(playlists), service.fetchPlaylists().first())
     }
 
-    private suspend fun mockSuccessfulCase(): PlaylistService {
-        val service = mockFailureCase()
-        return service
-    }
-
-    private suspend fun mockFailureCase(): PlaylistService {
-        whenever(playlistAPI.fetchAllPlaylist()).thenReturn(playlists)
-        val service = PlaylistService(playlistAPI)
-        return service
-    }
-
     @Test
     fun emitErrorResultWhenNetworkFails() = runBlockingTest {
-        whenever(playlistAPI.fetchAllPlaylist()).thenThrow(RuntimeException("Damn backend developer"))
-
-        val service = PlaylistService(playlistAPI)
+        val service = mockFailCase()
 
         assertEquals(
             "Something went wrong",
             service.fetchPlaylists().first().exceptionOrNull()?.message
         )
+    }
+
+    private suspend fun mockFailCase(): PlaylistService {
+        whenever(playlistAPI.fetchAllPlaylist()).thenThrow(RuntimeException("Damn backend developer"))
+
+        return PlaylistService(playlistAPI)
+    }
+
+    private suspend fun mockSuccessfulCase(): PlaylistService {
+        whenever(playlistAPI.fetchAllPlaylist()).thenReturn(playlists)
+        return PlaylistService(playlistAPI)
     }
 }
