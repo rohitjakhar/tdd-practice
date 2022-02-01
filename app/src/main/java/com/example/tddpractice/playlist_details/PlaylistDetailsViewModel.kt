@@ -10,10 +10,12 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaylistDetailsViewModel @Inject constructor(private val playlistDetailsService: PlaylistDetailsService) :
     ViewModel() {
+    val loader = MutableLiveData<Boolean>()
     val playlistDetails: MutableLiveData<Result<PlaylistDetails>> = MutableLiveData()
 
     fun getPlaylistDetails(playlistId: String) {
         viewModelScope.launch {
+            loader.postValue(true)
             playlistDetailsService.fetchPlaylistDetails(playlistId)
                 .collect {
                     playlistDetails.postValue(it)

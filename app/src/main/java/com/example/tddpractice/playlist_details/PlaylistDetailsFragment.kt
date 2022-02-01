@@ -34,11 +34,21 @@ class PlaylistDetailsFragment : Fragment() {
         Log.d("test", "id: $id")
         viewModel.getPlaylistDetails(id)
 
-        observeLiveData()
+        observePlaylistDetails()
+        observeLoader()
         return binding.root
     }
 
-    private fun observeLiveData() {
+    private fun observeLoader() = binding.apply {
+        viewModel.loader.observe(this as LifecycleOwner) { loading ->
+            when (loading) {
+                true -> loaderPlaylistDetails.visibility = View.VISIBLE
+                else -> loaderPlaylistDetails.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun observePlaylistDetails() {
         viewModel.playlistDetails.observe(this as LifecycleOwner) { playlistDetails ->
             if (playlistDetails.getOrNull() != null) {
                 Log.d("test", "success")

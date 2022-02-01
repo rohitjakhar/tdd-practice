@@ -1,6 +1,7 @@
 package com.example.tddpractice.playlist_details
 
 import com.example.tddpractice.utils.BaseUnitTest
+import com.example.tddpractice.utils.captureValues
 import com.example.tddpractice.utils.getValueForTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -42,6 +43,17 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
             exception,
             viewModel.playlistDetails.getValueForTest()!!.exceptionOrNull()
         )
+    }
+
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlistDetails.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
     }
 
     private suspend fun mockErrorCase() {
