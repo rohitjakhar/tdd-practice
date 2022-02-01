@@ -19,7 +19,7 @@ object PlaylistModule {
     @Singleton
     @Provides
     fun retrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.223.39:3000/")
+        .baseUrl("http://192.168.109.39:3000/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

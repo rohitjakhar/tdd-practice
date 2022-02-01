@@ -6,6 +6,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.example.tddpractice.playlist.idlingResource
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotExist
 import org.hamcrest.CoreMatchers
 import org.junit.Test
 
@@ -13,7 +15,7 @@ class PlaylistDetailsFeature : BaseUItest() {
 
     @Test
     fun displaysPlaylistNameAndDetails() {
-        navigateToPlaylistDetails()
+        navigateToPlaylistDetails(0)
 
         assertDisplayed("Hard Rock Cafe")
 
@@ -22,21 +24,43 @@ class PlaylistDetailsFeature : BaseUItest() {
 
     @Test
     fun displayLoaderWhileLoading() {
-        navigateToPlaylistDetails()
         IdlingRegistry.getInstance().unregister(idlingResource)
+
+        Thread.sleep(2000)
+        navigateToPlaylistDetails(0)
+
         assertDisplayed(
             R.id.loader_playlist_details
         )
     }
 
-    private fun navigateToPlaylistDetails() {
+    @Test
+    fun displaysErrorMessageWhenNetworkFails() {
+        navigateToPlaylistDetails(1)
+        assertDisplayed(R.string.generic_error)
+    }
+
+    @Test
+    fun hideErrorMessage() {
+        navigateToPlaylistDetails(1)
+        Thread.sleep(3000)
+        assertNotExist(R.string.generic_error)
+    }
+    @Test
+    fun hideLoader() {
+        navigateToPlaylistDetails(0)
+
+        assertNotDisplayed(R.id.loader_playlist_details)
+    }
+
+    private fun navigateToPlaylistDetails(row: Int) {
         Espresso.onView(
             CoreMatchers.allOf(
                 ViewMatchers.withId(R.id.playlist_image),
                 ViewMatchers.isDescendantOfA(
                     nthChildOf(
                         ViewMatchers.withId(R.id.playlists_list),
-                        0
+                        row
                     )
                 )
             )

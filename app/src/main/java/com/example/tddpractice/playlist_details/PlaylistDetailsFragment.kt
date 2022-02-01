@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.example.tddpractice.R
 import com.example.tddpractice.databinding.FragmentPlaylistDetailBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,7 +42,7 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun observeLoader() = binding.apply {
-        viewModel.loader.observe(this as LifecycleOwner) { loading ->
+        viewModel.loader.observe(this@PlaylistDetailsFragment as LifecycleOwner) { loading ->
             when (loading) {
                 true -> loaderPlaylistDetails.visibility = View.VISIBLE
                 else -> loaderPlaylistDetails.visibility = View.GONE
@@ -54,8 +56,11 @@ class PlaylistDetailsFragment : Fragment() {
                 Log.d("test", "success")
                 setupUi(playlistDetails)
             } else {
-                // TODO: 1/15/22
-                Log.d("test", "error: ${playlistDetails.exceptionOrNull()?.message}")
+                Snackbar.make(
+                    binding.root,
+                    R.string.generic_error,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
     }

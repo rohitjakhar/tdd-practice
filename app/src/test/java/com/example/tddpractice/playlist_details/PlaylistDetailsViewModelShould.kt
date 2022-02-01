@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Assert
 import org.junit.Test
 
 class PlaylistDetailsViewModelShould : BaseUnitTest() {
@@ -25,6 +26,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
     fun getPlaylistDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
 
+        viewModel.getPlaylistDetails(id)
         verify(service, times(1)).fetchPlaylistDetails(id)
     }
 
@@ -32,6 +34,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
     fun emitPlaylistDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
 
+        viewModel.getPlaylistDetails(id)
         assertEquals(expected, viewModel.playlistDetails.getValueForTest())
     }
 
@@ -49,13 +52,26 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
     fun showSpinnerWhileLoading() = runBlockingTest {
         mockSuccessfulCase()
 
+
         viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
             viewModel.playlistDetails.getValueForTest()
 
             assertEquals(true, values[0])
         }
     }
 
+    @Test
+    fun closeLoaderAfterPlaylistDetailsLoad() = runBlockingTest {
+        mockSuccessfulCase()
+
+        viewModel.getPlaylistDetails(id)
+        viewModel.loader.captureValues {
+            viewModel.playlistDetails.getValueForTest()
+
+            assertEquals(false, values.last())
+        }
+    }
     private suspend fun mockErrorCase() {
         whenever(service.fetchPlaylistDetails(id)).thenReturn(
             flow {
@@ -73,7 +89,5 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
             }
         )
         viewModel = PlaylistDetailsViewModel(service)
-
-        viewModel.getPlaylistDetails(id)
     }
 }
